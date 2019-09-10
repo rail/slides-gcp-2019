@@ -15,7 +15,7 @@
 
 ---
 
-# Dockerization
+## Dockerization
 - Dockerfile
 - docker.d
   - init.sh
@@ -24,7 +24,7 @@
   - worker.yml
 
 ---
-# scriptworker.yml
+## scriptworker.yml
 ```
 provisioner_id: { "$eval": "PROVISIONER_ID" }
 worker_group: { "$eval": "WORKER_GROUP" }
@@ -39,7 +39,7 @@ task_script:
 ...
 ```
 ---
-# Kubernetes
+## Kubernetes
 - Deployments
   - Many deployments
   - Each deployment has many replicas
@@ -49,7 +49,7 @@ task_script:
 
 ---
 
-# CI
+## CI
 - dev->PR->master->production    |
 - Build and push docker image    |
 - CloudOps Jenkins Pipeline      |
@@ -59,7 +59,7 @@ task_script:
 
 ---
 
-# Autoscaling
+## Autoscaling
 - Watch Taskcluster queue         |
 - Calculate desired replica count |
   - SLA/Tolerance                 |
@@ -69,13 +69,13 @@ task_script:
 
 ---
 
-# GCP vs Puppet
+## GCP vs Puppet
 - Secrets are handled by CloudOps
 - JSON-e for configs
 - Docker based on `python:3.7`
 
 ---
-# Future
+## Future
 - Move to monorepo
 - Multiple dev deployments
 - Logs and monitoring
