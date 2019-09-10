@@ -26,7 +26,7 @@
 ---
 ## scriptworker.yml
 
-```
+```yaml
 provisioner_id: { "$eval": "PROVISIONER_ID" }
 worker_group: { "$eval": "WORKER_GROUP" }
 worker_type: { "$eval": "WORKER_TYPE" }
