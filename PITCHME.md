@@ -3,7 +3,7 @@
 
 ---
 
-# Migration goals
+## Migration goals
 - No more puppet                          |
   - No more DNS                           |
   - No more ERB                           |
