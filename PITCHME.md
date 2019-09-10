@@ -82,4 +82,6 @@ task_script:
 
 ---
 # Q&A
+![Graph](./assets/b634468d.png)
 #### Thank you!
+
