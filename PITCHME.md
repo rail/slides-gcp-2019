@@ -84,6 +84,6 @@ task_script:
 
 ---
 # Q&A
-![Graph](./assets/b634468d.png)
+![Graph](./assets/a62ecfde.png)
 #### Thank you!
 
