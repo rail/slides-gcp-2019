@@ -1,34 +1,33 @@
 ## Scriptworkerks in GCP
-### Rail Aliiev, Sep 11, 2019
+### Rail Aliiev, Nov 20, 2019
 
 ---
 
-## Migration goals
-- No more puppet                          |
-  - No more DNS                           |
-  - No more ERB                           |
-  - Easier local development using Docker |
-- Move to CloudOps                        |
-  - SLA                                   |
-  - Security                              |
-- Autoscaling                             |
+## We have migrated... twice!
+- Mono repo
+- `production`, `production-treescript`
+- `dev`, `dev-treescript`
 
 ---
+## Kubernetes: Memory
+- Lives in `cloudops-infra`
 
-## Dockerization
-- Dockerfile
-- docker.d
-  - init.sh
-  - init_worker.sh
-  - scriptworker.yml
-  - worker.yml
+```yaml
+...
+ resources:
+  limits:
+    cpu: 1200m
+    memory: 4500Mi
+  requests:
+    cpu: 1000m
+    memory: 4000Mi
+```
 
 ---
 ## scriptworker.yml
 
 ```yaml
-provisioner_id: { "$eval": "PROVISIONER_ID" }
-worker_group: { "$eval": "WORKER_GROUP" }
+...
 worker_type: { "$eval": "WORKER_TYPE" }
 worker_id: { "$eval": "WORKER_ID" }
 credentials:
@@ -41,49 +40,65 @@ task_script:
 ```
 
 ---
-## Kubernetes
-- Deployments
-  - Many deployments
-  - Each deployment has many replicas
-- Health checks
-- preStop
-- Logs
+## Kubernetes: Environment variables
+- Defined in `cloudops-infra`
+```yaml
+...
+data:
+  TASKCLUSTER_ROOT_URL: {{ .Values.taskclusterRootUrl | quote }}
+  TASKCLUSTER_CLIENT_ID: {{ .Values.taskclusterClientId }}
+  PROJECT_NAME: {{ .Values.projectName }}
+...
+```
+
+- Filters
+```yaml
+rules:
+- filters:
+    app: relengworker
+    realm: nonprod
+    env: dev
+    chart: tree
+    type: firefoxci-gecko-1
+  values:
+    cotProduct: firefox
+    env: dev
+    projectName: tree
+    sshUser: trybld
+    taskclusterClientId: project/releng/scriptworker/tree/dev/firefoxci-gecko-1
+```
 
 ---
+## Kubernetes: Secrets
+- Same templating
+```yaml
+data:
+  TASKCLUSTER_ACCESS_TOKEN: {{ .Values.taskclusterAccessToken | b64enc | quote }}
+  SSH_KEY: {{ .Values.sshKey | b64enc | quote }}
+```
+- Filters and values live in SOPS repo
 
-## CI
-- dev->PR->master->production    |
-- Build and push docker image    |
-- CloudOps Jenkins Pipeline      |
-  - Mirror image                 |
-  - Terraform/Helm magic         |
-- Gracefully replace all workers |
-
----
-
-## Autoscaling
-- Watch Taskcluster queue         |
-- Calculate desired replica count |
-  - SLA/Tolerance                 |
-  - Task duration                 |
-  - Running instances             |
-  - Max/Min replicas              |
-
----
-
-## GCP vs Puppet
-- Secrets are handled by CloudOps
-- JSON-e for configs
-- Docker based on `python:3.7`
+```yaml
+rules:
+- filters:
+        app: ENC[AES256_GCM,data:pbb...kyd0=,tag:Q3wZL6/48A==,type:str]
+        realm: ENC[AES256_GCM,data:RWcDQRBJw=,tag:NyZ+VQ==,type:str]
+        env: ENC[AES256_GCM,data:HXBm,iv:3Dw47sX1a4=,tag:Tw+Q==,type:str]
+        chart: ENC[AES256_GCM,data:7YNkA==,iv:eU5Bzxmw=,tag:58N04A==,type:str]
+        type: ENC[AES256_GCM,data:tZFu6DxkQA==,iv:9XO6lobIDQA=,tag:idRTcQ==,type:str]
+    values:
+        taskclusterAccessToken: ENC[AES256_GCM,data:weSvCTAs9DZyk=,tag:0j4omqQGQEg==,type:str]
+        sshKey: ENC[AES256_GCM,data:tFumOhZMkQxL3...]
+```
 
 ---
 ## Future
-- Move to monorepo
+- Faster deployments
 - Multiple dev deployments
 - Logs and monitoring
+- GCP tags for better cost stats
 
 ---
 # Q&A
-![Graph](./assets/a62ecfde.png)
 #### Thank you!
 
