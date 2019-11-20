@@ -7,6 +7,7 @@
 - Mono repo
 - `production`, `production-treescript`
 - `dev`, `dev-treescript`
+- More self serve
 
 ---
 ## K8S: Memory
