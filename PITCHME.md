@@ -9,7 +9,7 @@
 - `dev`, `dev-treescript`
 
 ---
-## Kubernetes: Memory
+## K8S: Memory
 - Lives in `cloudops-infra`
 
 ```yaml
@@ -40,7 +40,7 @@ task_script:
 ```
 
 ---
-## Kubernetes: Environment variables
+## K8S: Environment variables
 - Defined in `cloudops-infra`
 ```yaml
 ...
@@ -69,7 +69,7 @@ rules:
 ```
 
 ---
-## Kubernetes: Secrets
+## K8S: Secrets
 - Same templating
 ```yaml
 data:
