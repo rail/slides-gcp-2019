@@ -51,6 +51,8 @@ data:
 ...
 ```
 
+---
+## K8S: Environment variables
 - Filters
 ```yaml
 rules:
